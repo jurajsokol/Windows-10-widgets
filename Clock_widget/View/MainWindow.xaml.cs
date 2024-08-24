@@ -1,17 +1,20 @@
-﻿using System;
-using System.Windows;
+﻿using System.Windows;
 
-namespace Windows_10_app
+namespace Clock_widget.View
 {
+    /// <summary>
+    /// Interaction logic for MainWindow.xaml
+    /// </summary>
     public partial class MainWindow : Window
     {
         int PADDING = 5;
 
-        DateTime localDate = DateTime.Now;        
-        
+        DateTime localDate = DateTime.Now;
+
         public MainWindow()
         {
             InitializeComponent();
+
             this.ShowInTaskbar = false;
             this.Left = SystemParameters.PrimaryScreenWidth - this.Width - PADDING;
             System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer(new TimeSpan(0, 0, 1), System.Windows.Threading.DispatcherPriority.Normal, delegate
@@ -22,20 +25,11 @@ namespace Windows_10_app
             {
                 this.dateClock.Text = DateTime.Now.ToString("dd. MMMMM");
             }, this.Dispatcher);
-
         }
 
         private void CloseApp(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
         }
-
-        private void Window_Loaded(object sender, RoutedEventArgs e)
-        {
-            Windows_10_app.BlurFeature.NativeBlurBackground.EnableBlur(this);
-        }
-
-        
-
     }
 }
