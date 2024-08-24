@@ -1,4 +1,5 @@
 ﻿using System.Windows;
+using System.Windows.Input;
 
 namespace Clock_widget.View
 {
@@ -7,29 +8,34 @@ namespace Clock_widget.View
     /// </summary>
     public partial class MainWindow : Window
     {
-        int PADDING = 5;
-
-        DateTime localDate = DateTime.Now;
+        private const int PADDING = 10;
 
         public MainWindow()
         {
             InitializeComponent();
-
-            this.ShowInTaskbar = false;
-            this.Left = SystemParameters.PrimaryScreenWidth - this.Width - PADDING;
-            System.Windows.Threading.DispatcherTimer timer = new System.Windows.Threading.DispatcherTimer(new TimeSpan(0, 0, 1), System.Windows.Threading.DispatcherPriority.Normal, delegate
-            {
-                this.digitalClock.Text = DateTime.Now.ToString("HH:mm");
-            }, this.Dispatcher);
-            System.Windows.Threading.DispatcherTimer date = new System.Windows.Threading.DispatcherTimer(new TimeSpan(0, 0, 1), System.Windows.Threading.DispatcherPriority.Normal, delegate
-            {
-                this.dateClock.Text = DateTime.Now.ToString("dd. MMMMM");
-            }, this.Dispatcher);
         }
 
         private void CloseApp(object sender, RoutedEventArgs e)
         {
             Application.Current.Shutdown();
+        }
+
+        private void Window_MouseDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        {
+            if (e.ChangedButton == MouseButton.Left)
+            { 
+                this.DragMove();
+            }
+        }
+
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            while (true)
+            {
+                await Task.Delay(TimeSpan.FromSeconds(1));
+                this.digitalClock.Text = DateTime.Now.ToString("HH:mm:ss");
+                this.dateClock.Text = DateTime.Now.ToString("dd. MMMMM");
+            }
         }
     }
 }
